@@ -18,6 +18,8 @@ if (command === "my-tweets"){
     spotifySearch(process.argv[3]);
 } else if (command === "movie-this") {
     omdbSearch(process.argv[3]);
+} else if (command === "do-what-it-says"){
+    fsFun()
 }
 
 
@@ -34,8 +36,8 @@ function mytweets(){
 }
 
 function spotifySearch(song){
-    if(song == undefined){
-        song = 'The Sign';
+    if(song === undefined){
+        song = 'The Sign ace of base';
     }
 
     spotify.search({ type: 'track', query: song }, function(err, data) {
@@ -51,13 +53,12 @@ function spotifySearch(song){
 }
 
 function omdbSearch(movie){
+    if (movie === undefined){
+        movie = 'Mr. Nobody';
+       } 
         request("http://www.omdbapi.com/?t=" + movie + "&apikey=trilogy", function (error, response, body) {
-           
-        if(movie === ""){
-             movie = 'Mr. Nobody';
-            } 
-        
-            console.log('error:', error); 
+     
+            //console.log('error:', error); 
             //console.log('statusCode:', response && response.statusCode); 
             //console.log('body' + body); 
             console.log('Movie Title: ' + JSON.parse(body).Title); 
@@ -69,5 +70,20 @@ function omdbSearch(movie){
             console.log('Plot ' + JSON.parse(body).Plot);
             console.log('Actors ' + JSON.parse(body).Actors);
         });
+
+}
+
+function fsFun(){
+    fs.readFile("random.txt", "utf8", function(error, data) {
+        if (error) {
+          return console.log(error);
+        }
+        console.log(data);
+        let dataArr = data.split(","); 
+        let songName = dataArr.pop()
+        spotifySearch(songName);   
+      });
+
+
 
 }
